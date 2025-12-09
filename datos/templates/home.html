@@ -3,7 +3,6 @@
 
 <head>
     <title>Demo Render con Coordenadas</title>
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         .container {
@@ -101,7 +100,6 @@
 
 </html> -->
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -168,7 +166,7 @@
     <!-- JS de Leaflet -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializar mapa centrado en Chile (puedes cambiar coordenadas)
+        // Inicializar mapa centrado en Chile (valor inicial)
         var map = L.map('map').setView([-33.45, -70.66], 5);
 
         // Capa base de OpenStreetMap
@@ -187,13 +185,22 @@
             {% endfor %}
         ];
 
+        var lastMarker = null;
+
         // Crear marcadores
         registros.forEach(function (reg) {
             if (reg.lat && reg.lng) {
-                L.marker([reg.lat, reg.lng]).addTo(map)
-                  .bindPopup(reg.nombre);
+                var marker = L.marker([reg.lat, reg.lng]).addTo(map)
+                              .bindPopup(reg.nombre);
+                lastMarker = marker; // guardar el último marcador
             }
         });
+
+        // Centrar en la última coordenada agregada y abrir popup
+        if (lastMarker) {
+            map.setView(lastMarker.getLatLng(), 12); // zoom cercano
+            lastMarker.openPopup();
+        }
     </script>
 </body>
 </html>

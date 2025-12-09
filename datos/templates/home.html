@@ -1,14 +1,41 @@
 <!-- <!DOCTYPE html>
 <html>
+
 <head>
     <title>Demo Render con Coordenadas</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        .container { display: flex; }
-        .form { width: 40%; padding: 10px; }
-        .table { width: 60%; padding: 10px; }
-        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+        .container {
+            display: flex;
+        }
+
+        .form {
+            width: 40%;
+            padding: 10px;
+        }
+
+        .table {
+            width: 60%;
+            padding: 10px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <h1>Formulario y Tabla con Coordenadas</h1>
     <div class="container">
@@ -38,8 +65,42 @@
             </table>
         </div>
     </div>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializar mapa centrado en Chile (puedes cambiar coordenadas)
+        var map = L.map('map').setView([-33.45, -70.66], 5);
+
+        // Capa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Pasar registros desde Django al JS
+        var registros = [
+            {% for r in registros %}
+        {
+            nombre: "{{ r.nombre|escapejs }}",
+                lat: { { r.latitud | default_if_none: "null" } },
+            lng: { { r.longitud | default_if_none: "null" } }
+        } {% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        ];
+
+        // Crear marcadores
+        registros.forEach(function (reg) {
+            if (reg.lat && reg.lng) {
+                L.marker([reg.lat, reg.lng]).addTo(map)
+                    .bindPopup(reg.nombre);
+            }
+        });
+    </script>
 </body>
+
 </html> -->
+
 
 <!DOCTYPE html>
 <html>

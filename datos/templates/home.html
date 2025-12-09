@@ -48,11 +48,27 @@
     <!-- CSS de Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        .container { display: flex; }
-        .form { width: 40%; padding: 10px; }
-        .table { width: 60%; padding: 10px; }
-        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
-        #map { height: 400px; width: 100%; margin-top: 20px; }
+        .container {
+            display: flex;
+        }
+        .form {
+            width: 40%;
+            padding: 10px;
+        }
+        .table {
+            width: 60%;
+            padding: 10px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -102,16 +118,16 @@
         // Pasar registros desde Django al JS
         var registros = [
             {% for r in registros %}
-                {
-                    nombre: "{{ r.nombre }}",
-                    lat: {{ r.latitud|default:"null" }},
-                    lng: {{ r.longitud|default:"null" }}
-                },
+            {
+                nombre: "{{ r.nombre|escapejs }}",
+                lat: {{ r.latitud|default_if_none:"null" }},
+                lng: {{ r.longitud|default_if_none:"null" }}
+            }{% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
 
         // Crear marcadores
-        registros.forEach(function(reg) {
+        registros.forEach(function (reg) {
             if (reg.lat && reg.lng) {
                 L.marker([reg.lat, reg.lng]).addTo(map)
                   .bindPopup(reg.nombre);
@@ -120,5 +136,3 @@
     </script>
 </body>
 </html>
-
-

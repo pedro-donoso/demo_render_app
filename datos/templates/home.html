@@ -1,46 +1,6 @@
 <!-- <!DOCTYPE html>
 <html>
 <head>
-    <title>Demo Render</title>
-    <style>
-        .container { display: flex; }
-        .form { width: 40%; padding: 10px; }
-        .table { width: 60%; padding: 10px; }
-        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
-    </style>
-</head>
-<body>
-    <h1>Formulario y Tabla</h1>
-    <div class="container">
-        <div class="form">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Guardar</button>
-            </form>
-        </div>
-        <div class="table">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                </tr>
-                {% for r in registros %}
-                <tr>
-                    <td>{{ r.id }}</td>
-                    <td>{{ r.nombre }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-</body>
-</html> -->
-
-
-<!DOCTYPE html>
-<html>
-<head>
     <title>Demo Render con Coordenadas</title>
     <style>
         .container { display: flex; }
@@ -79,5 +39,86 @@
         </div>
     </div>
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo Render con Coordenadas</title>
+    <!-- CSS de Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        .container { display: flex; }
+        .form { width: 40%; padding: 10px; }
+        .table { width: 60%; padding: 10px; }
+        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+        #map { height: 400px; width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Formulario y Tabla con Coordenadas</h1>
+    <div class="container">
+        <div class="form">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
+        <div class="table">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                </tr>
+                {% for r in registros %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.nombre }}</td>
+                    <td>{{ r.latitud }}</td>
+                    <td>{{ r.longitud }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <!-- Contenedor del mapa -->
+    <div id="map"></div>
+
+    <!-- JS de Leaflet -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializar mapa centrado en Chile (puedes cambiar coordenadas)
+        var map = L.map('map').setView([-33.45, -70.66], 5);
+
+        // Capa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Pasar registros desde Django al JS
+        var registros = [
+            {% for r in registros %}
+                {
+                    nombre: "{{ r.nombre }}",
+                    lat: {{ r.latitud|default:"null" }},
+                    lng: {{ r.longitud|default:"null" }}
+                },
+            {% endfor %}
+        ];
+
+        // Crear marcadores
+        registros.forEach(function(reg) {
+            if (reg.lat && reg.lng) {
+                L.marker([reg.lat, reg.lng]).addTo(map)
+                  .bindPopup(reg.nombre);
+            }
+        });
+    </script>
+</body>
 </html>
+
 

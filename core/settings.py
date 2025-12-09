@@ -13,6 +13,12 @@ if os.environ.get("DATABASE_URL"):
     }
 else:
     # Fallback local con SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Quick-start development settings - unsuitable for production

@@ -32,23 +32,30 @@
     <div class="px-4 py-6">
         <h1 class="text-2xl font-bold mb-6">Formulario, Mapa y Tabla</h1>
 
-        <!-- Formulario horizontal -->
+        <!-- Formulario horizontal con placeholders -->
         <form id="formulario" method="post" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             {% csrf_token %}
             <div class="flex items-center space-x-2">
                 <label for="id_nombre" class="font-medium">Nombre:</label>
-                {{ form.nombre }}
+                <input type="text" name="nombre" id="id_nombre"
+                       class="border rounded px-2 py-1 w-full"
+                       placeholder="Ej: Plaza de Armas">
             </div>
             <div class="flex items-center space-x-2">
                 <label for="id_latitud" class="font-medium">Latitud:</label>
-                {{ form.latitud }}
+                <input type="text" name="latitud" id="id_latitud"
+                       class="border rounded px-2 py-1 w-full"
+                       placeholder="-33.45">
             </div>
             <div class="flex items-center space-x-2">
                 <label for="id_longitud" class="font-medium">Longitud:</label>
-                {{ form.longitud }}
+                <input type="text" name="longitud" id="id_longitud"
+                       class="border rounded px-2 py-1 w-full"
+                       placeholder="-70.66">
             </div>
             <div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700">
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700">
                     Guardar
                 </button>
             </div>

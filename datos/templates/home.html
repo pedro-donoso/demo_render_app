@@ -9,11 +9,18 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- Navbar normal (no fijo) -->
+    <!-- Navbar con hamburguesa -->
     <nav class="w-full bg-gray-900 text-white shadow">
         <div class="flex items-center justify-between px-4 py-3">
             <a class="font-bold text-lg" href="#">Coordenadas</a>
-            <div class="hidden lg:flex space-x-4">
+
+            <!-- Botón hamburguesa (visible en móviles) -->
+            <button id="menu-btn" class="lg:hidden px-2 py-1 border rounded">
+                ☰
+            </button>
+
+            <!-- Links -->
+            <div id="menu" class="hidden lg:flex flex-col lg:flex-row lg:space-x-4 mt-2 lg:mt-0">
                 <a class="px-3 py-2 border rounded hover:bg-white hover:text-blue-600 transition" href="#formulario">Formulario</a>
                 <a class="px-3 py-2 border rounded hover:bg-white hover:text-blue-600 transition" href="#mapa">Mapa</a>
                 <a class="px-3 py-2 border rounded hover:bg-white hover:text-blue-600 transition" href="#tabla">Tabla</a>
@@ -28,20 +35,22 @@
         <!-- Formulario horizontal -->
         <form id="formulario" method="post" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             {% csrf_token %}
-            <div>
-                <label for="id_nombre" class="block font-medium">Nombre</label>
+            <div class="flex items-center space-x-2">
+                <label for="id_nombre" class="font-medium">Nombre:</label>
                 {{ form.nombre }}
             </div>
-            <div>
-                <label for="id_latitud" class="block font-medium">Latitud</label>
+            <div class="flex items-center space-x-2">
+                <label for="id_latitud" class="font-medium">Latitud:</label>
                 {{ form.latitud }}
             </div>
-            <div>
-                <label for="id_longitud" class="block font-medium">Longitud</label>
+            <div class="flex items-center space-x-2">
+                <label for="id_longitud" class="font-medium">Longitud:</label>
                 {{ form.longitud }}
             </div>
             <div>
-                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700">Guardar</button>
+                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700">
+                    Guardar
+                </button>
             </div>
         </form>
 
@@ -106,7 +115,14 @@
             var group = L.featureGroup(markers);
             map.fitBounds(group.getBounds());
         }
+
+        // Script para menú hamburguesa
+        const menuBtn = document.getElementById("menu-btn");
+        const menu = document.getElementById("menu");
+
+        menuBtn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
     </script>
 </body>
 </html>
-

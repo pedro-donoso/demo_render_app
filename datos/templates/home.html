@@ -9,6 +9,7 @@
     <style>
         html {
             scroll-behavior: smooth; /* scroll suave */
+            scroll-padding-top: 100px; /* espacio extra al hacer scroll con anclas */
         }
         #map {
             height: 400px;
@@ -16,16 +17,20 @@
         }
         @media (max-width: 768px) {
             #map {
-                height: 100vh; /* pantalla completa en móvil */
+                height: 100vh;
                 width: 100vw;
             }
+        }
+        .navbar .nav-link.active {
+            font-weight: bold;
+            color: #0d6efd !important;
         }
     </style>
 </head>
 <body class="container-fluid p-0">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Navbar fija -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Coordenadas</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -33,18 +38,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Links con scroll automático -->
+            <!-- Links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#formulario">Formulario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#mapa">Mapa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tabla">Tabla</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#formulario">Formulario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#mapa">Mapa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tabla">Tabla</a></li>
                 </ul>
             </div>
         </div>
@@ -113,37 +112,48 @@
     <script>
         // Inicializar mapa centrado en Chile
         var map = L.map('map').setView([-33.45, -70.66], 5);
-
-        // Capa base de OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Pasar registros desde Django al JS
         var registros = [
             {% for r in registros %}
-            {
-                nombre: "{{ r.nombre|escapejs }}",
-                lat: {{ r.latitud|default_if_none:"null" }},
-                lng: {{ r.longitud|default_if_none:"null" }}
-            }{% if not forloop.last %},{% endif %}
+            { nombre: "{{ r.nombre|escapejs }}", lat: {{ r.latitud|default_if_none:"null" }}, lng: {{ r.longitud|default_if_none:"null" }} }
+            {% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
 
         var markers = [];
         registros.forEach(function (reg) {
             if (reg.lat && reg.lng) {
-                var marker = L.marker([reg.lat, reg.lng]).addTo(map)
-                              .bindPopup(reg.nombre);
+                var marker = L.marker([reg.lat, reg.lng]).addTo(map).bindPopup(reg.nombre);
                 markers.push(marker);
             }
         });
-
-        // Ajustar vista a todos los marcadores
         if (markers.length > 0) {
             var group = L.featureGroup(markers);
             map.fitBounds(group.getBounds());
         }
+
+        // Resaltar link activo según scroll
+        const sections = document.querySelectorAll("#formulario, #mapa, #tabla");
+        const navLinks = document.querySelectorAll(".navbar .nav-link");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120; // compensar navbar
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute("id");
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove("active");
+                if (link.getAttribute("href").includes(current)) {
+                    link.classList.add("active");
+                }
+            });
+        });
     </script>
 </body>
 </html>

@@ -69,7 +69,7 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializar mapa centrado en Chile (puedes cambiar coordenadas)
+        // Inicializar mapa centrado en Chile (valor inicial)
         var map = L.map('map').setView([-33.45, -70.66], 5);
 
         // Capa base de OpenStreetMap
@@ -88,13 +88,22 @@
         {% endfor %}
         ];
 
+        var lastMarker = null;
+
         // Crear marcadores
         registros.forEach(function (reg) {
             if (reg.lat && reg.lng) {
-                L.marker([reg.lat, reg.lng]).addTo(map)
+                var marker = L.marker([reg.lat, reg.lng]).addTo(map)
                     .bindPopup(reg.nombre);
+                lastMarker = marker; // guardar el último marcador
             }
         });
+
+        // Centrar en la última coordenada agregada y abrir popup
+        if (lastMarker) {
+            map.setView(lastMarker.getLatLng(), 12); // zoom cercano
+            lastMarker.openPopup();
+        }
     </script>
 </body>
 
@@ -108,31 +117,31 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         .container {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; /* tres columnas iguales */
+            gap: 20px;
         }
-        .form {
-            width: 40%;
+        .form, .table, #map {
             padding: 10px;
-        }
-        .table {
-            width: 60%;
-            padding: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
         }
         table, th, td {
             border: 1px solid black;
             border-collapse: collapse;
             padding: 5px;
+            width: 100%;
         }
         #map {
-            height: 400px;
+            height: 400px; /* altura fija */
             width: 100%;
-            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Formulario y Tabla con Coordenadas</h1>
+    <h1>Formulario, Tabla y Mapa en 3 Columnas</h1>
     <div class="container">
+        <!-- Columna 1: Formulario -->
         <div class="form">
             <form method="post">
                 {% csrf_token %}
@@ -140,6 +149,8 @@
                 <button type="submit">Guardar</button>
             </form>
         </div>
+
+        <!-- Columna 2: Tabla -->
         <div class="table">
             <table>
                 <tr>
@@ -158,15 +169,15 @@
                 {% endfor %}
             </table>
         </div>
-    </div>
 
-    <!-- Contenedor del mapa -->
-    <div id="map"></div>
+        <!-- Columna 3: Mapa -->
+        <div id="map"></div>
+    </div>
 
     <!-- JS de Leaflet -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializar mapa centrado en Chile (valor inicial)
+        // Inicializar mapa centrado en Chile
         var map = L.map('map').setView([-33.45, -70.66], 5);
 
         // Capa base de OpenStreetMap
@@ -185,21 +196,19 @@
             {% endfor %}
         ];
 
-        var lastMarker = null;
-
-        // Crear marcadores
+        var markers = [];
         registros.forEach(function (reg) {
             if (reg.lat && reg.lng) {
                 var marker = L.marker([reg.lat, reg.lng]).addTo(map)
                               .bindPopup(reg.nombre);
-                lastMarker = marker; // guardar el último marcador
+                markers.push(marker);
             }
         });
 
-        // Centrar en la última coordenada agregada y abrir popup
-        if (lastMarker) {
-            map.setView(lastMarker.getLatLng(), 12); // zoom cercano
-            lastMarker.openPopup();
+        // Ajustar vista a todos los marcadores
+        if (markers.length > 0) {
+            var group = L.featureGroup(markers);
+            map.fitBounds(group.getBounds());
         }
     </script>
 </body>

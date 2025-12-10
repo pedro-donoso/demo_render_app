@@ -13,13 +13,7 @@
     <nav class="w-full bg-gray-900 text-white shadow">
         <div class="flex items-center justify-between px-4 py-3">
             <a class="font-bold text-lg" href="#">Coordenadas</a>
-
-            <!-- Botón hamburguesa (visible en móviles) -->
-            <button id="menu-btn" class="lg:hidden px-2 py-1 border rounded">
-                ☰
-            </button>
-
-            <!-- Links -->
+            <button id="menu-btn" class="lg:hidden px-2 py-1 border rounded">☰</button>
             <div id="menu" class="hidden lg:flex flex-col lg:flex-row lg:space-x-4 mt-2 lg:mt-0">
                 <a class="px-3 py-2 border rounded hover:bg-white hover:text-blue-600 transition" href="#formulario">Formulario</a>
                 <a class="px-3 py-2 border rounded hover:bg-white hover:text-blue-600 transition" href="#mapa">Mapa</a>
@@ -32,7 +26,7 @@
     <div class="px-4 py-6">
         <h1 class="text-2xl font-bold mb-6">Formulario, Mapa y Tabla</h1>
 
-        <!-- Formulario horizontal con placeholders -->
+        <!-- Formulario -->
         <form id="formulario" method="post" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             {% csrf_token %}
             <div class="flex items-center space-x-2">
@@ -45,13 +39,13 @@
                 <label for="id_latitud" class="font-medium">Latitud:</label>
                 <input type="text" name="latitud" id="id_latitud"
                        class="border rounded px-2 py-1 w-full"
-                       placeholder="-33.437492">
+                       placeholder="-33.450000">
             </div>
             <div class="flex items-center space-x-2">
                 <label for="id_longitud" class="font-medium">Longitud:</label>
                 <input type="text" name="longitud" id="id_longitud"
                        class="border rounded px-2 py-1 w-full"
-                       placeholder="-70.651062">
+                       placeholder="-70.660000">
             </div>
             <div>
                 <button type="submit"
@@ -82,7 +76,10 @@
                     </thead>
                     <tbody>
                         {% for r in registros %}
-                        <tr class="hover:bg-gray-100">
+                        <tr class="hover:bg-gray-100 cursor-pointer"
+                            data-lat="{{ r.latitud }}"
+                            data-lng="{{ r.longitud }}"
+                            data-nombre="{{ r.nombre }}">
                             <td class="px-4 py-2 border">{{ r.id }}</td>
                             <td class="px-4 py-2 border">{{ r.nombre }}</td>
                             <td class="px-4 py-2 border">{{ r.latitud }}</td>
@@ -98,35 +95,48 @@
     <!-- JS de Leaflet -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializar mapa centrado en Chile
+        // Inicializar mapa
         var map = L.map('map').setView([-33.45, -70.66], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        // Crear marcadores desde registros
         var registros = [
             {% for r in registros %}
-            { nombre: "{{ r.nombre|escapejs }}", lat: {{ r.latitud|default_if_none:"null" }}, lng: {{ r.longitud|default_if_none:"null" }} }
+            { id: {{ r.id }}, nombre: "{{ r.nombre|escapejs }}", lat: {{ r.latitud|default_if_none:"null" }}, lng: {{ r.longitud|default_if_none:"null" }} }
             {% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
 
-        var markers = [];
+        var markers = {};
         registros.forEach(function (reg) {
             if (reg.lat && reg.lng) {
                 var marker = L.marker([reg.lat, reg.lng]).addTo(map).bindPopup(reg.nombre);
-                markers.push(marker);
+                markers[reg.id] = marker;
             }
         });
-        if (markers.length > 0) {
-            var group = L.featureGroup(markers);
-            map.fitBounds(group.getBounds());
-        }
 
-        // Script para menú hamburguesa
+        // Centrar mapa al hacer clic en la fila
+        document.querySelectorAll("tbody tr").forEach(function(row) {
+            row.addEventListener("click", function() {
+                var lat = parseFloat(row.dataset.lat);
+                var lng = parseFloat(row.dataset.lng);
+                var nombre = row.dataset.nombre;
+
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    map.setView([lat, lng], 12);
+                    L.popup()
+                      .setLatLng([lat, lng])
+                      .setContent(nombre)
+                      .openOn(map);
+                }
+            });
+        });
+
+        // Script menú hamburguesa
         const menuBtn = document.getElementById("menu-btn");
         const menu = document.getElementById("menu");
-
         menuBtn.addEventListener("click", () => {
             menu.classList.toggle("hidden");
         });

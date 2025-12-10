@@ -23,62 +23,56 @@
     </style>
 </head>
 
-<body class="container-fluid py-4">
-    <h1 class="mb-4">Formulario, Tabla y Mapa</h1>
+<body class="container py-4">
+    <h1 class="mb-4">Formulario, Mapa y Tabla</h1>
 
     <form method="post" class="row g-3 mb-4">
         {% csrf_token %}
-
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label for="id_nombre" class="form-label">Nombre</label>
             {{ form.nombre }}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label for="id_latitud" class="form-label">Latitud</label>
             {{ form.latitud }}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label for="id_longitud" class="form-label">Longitud</label>
             {{ form.longitud }}
         </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
     </form>
 
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Latitud</th>
-                                <th>Longitud</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for r in registros %}
-                            <tr>
-                                <td>{{ r.id }}</td>
-                                <td>{{ r.nombre }}</td>
-                                <td>{{ r.latitud }}</td>
-                                <td>{{ r.longitud }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="card mb-4">
+        <div class="card-body p-0">
+            <div id="map"></div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <div id="map"></div>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in registros %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.nombre }}</td>
+                        <td>{{ r.latitud }}</td>
+                        <td>{{ r.longitud }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -144,26 +138,26 @@
         }
     </style>
 </head>
-<body class="container py-4">
+<body class="container-fluid py-4">
     <h1 class="mb-4">Formulario, Mapa y Tabla</h1>
 
-    <!-- Formulario con labels visibles -->
-    <form method="post" class="row g-3 mb-4">
+    <!-- Formulario horizontal ocupando todo el ancho -->
+    <form method="post" class="row g-3 align-items-end mb-4">
         {% csrf_token %}
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="id_nombre" class="form-label">Nombre</label>
             {{ form.nombre }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="id_latitud" class="form-label">Latitud</label>
             {{ form.latitud }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="id_longitud" class="form-label">Longitud</label>
             {{ form.longitud }}
         </div>
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary">Guardar</button>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">Guardar</button>
         </div>
     </form>
 

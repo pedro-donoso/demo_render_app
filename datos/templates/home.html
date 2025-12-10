@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Demo Render con Coordenadas</title>
     <!-- Bootstrap CSS -->
@@ -8,25 +9,31 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         html {
-            scroll-behavior: smooth; /* scroll suave */
-            scroll-padding-top: 100px; /* espacio extra al hacer scroll con anclas */
+            scroll-behavior: smooth;
+            /* scroll suave */
+            scroll-padding-top: 100px;
+            /* espacio extra al hacer scroll con anclas */
         }
+
         #map {
             height: 400px;
             width: 100%;
         }
+
         @media (max-width: 768px) {
             #map {
                 height: 100vh;
                 width: 100vw;
             }
         }
+
         .navbar .nav-link.active {
             font-weight: bold;
             color: #0d6efd !important;
         }
     </style>
 </head>
+
 <body class="container-fluid p-0">
 
     <!-- Navbar fija -->
@@ -118,9 +125,9 @@
 
         var registros = [
             {% for r in registros %}
-            { nombre: "{{ r.nombre|escapejs }}", lat: {{ r.latitud|default_if_none:"null" }}, lng: {{ r.longitud|default_if_none:"null" }} }
-            {% if not forloop.last %},{% endif %}
-            {% endfor %}
+        { nombre: "{{ r.nombre|escapejs }}", lat: { { r.latitud | default_if_none: "null" } }, lng: { { r.longitud | default_if_none: "null" } } }
+        {% if not forloop.last %}, {% endif %}
+        {% endfor %}
         ];
 
         var markers = [];
@@ -156,4 +163,5 @@
         });
     </script>
 </body>
+
 </html>

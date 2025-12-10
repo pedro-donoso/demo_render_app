@@ -22,10 +22,11 @@
 </head>
 
 <body class="container-fluid py-4">
-    <h1 class="mb-4">Formulario, Tabla y Mapa con Bootstrap</h1>
-    <div class="row">
+    <h1 class="mb-4">Formulario, Tabla y Mapa</h1>
+
+    <div class="row mb-4">
         <div class="col-lg-6 mb-4">
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
@@ -34,6 +35,9 @@
                     </form>
                 </div>
             </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -59,8 +63,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-lg-6 mb-4">
+    <div class="row">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body p-0">
                     <div id="map"></div>
@@ -134,23 +140,27 @@
 <body class="container-fluid py-4">
     <h1 class="mb-4">Formulario, Tabla y Mapa</h1>
 
-    <!-- Fila superior: formulario y tabla lado a lado -->
-    <div class="row mb-4">
-        <!-- Columna formulario -->
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </form>
-                </div>
-            </div>
+    <!-- Formulario horizontal debajo del título -->
+    <form method="post" class="row g-3 mb-4">
+        {% csrf_token %}
+        <!-- Ejemplo de campos: ajusta según tu modelo -->
+        <div class="col-md-3">
+            {{ form.nombre }}
         </div>
+        <div class="col-md-3">
+            {{ form.latitud }}
+        </div>
+        <div class="col-md-3">
+            {{ form.longitud }}
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+        </div>
+    </form>
 
-        <!-- Columna tabla -->
-        <div class="col-lg-6 mb-4">
+    <!-- Fila superior: tabla -->
+    <div class="row mb-4">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered table-striped">

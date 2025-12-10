@@ -3,7 +3,9 @@
 
 <head>
     <title>Demo Render con Coordenadas</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         #map {
@@ -24,20 +26,25 @@
 <body class="container-fluid py-4">
     <h1 class="mb-4">Formulario, Tabla y Mapa</h1>
 
-    <div class="row mb-4">
-        <div class="col-lg-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <form method="post" class="row g-3 mb-4">
+        {% csrf_token %}
 
-        <div class="col-lg-6 mb-4">
+        <div class="col-md-3">
+            {{ form.nombre }}
+        </div>
+        <div class="col-md-3">
+            {{ form.latitud }}
+        </div>
+        <div class="col-md-3">
+            {{ form.longitud }}
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+        </div>
+    </form>
+
+    <div class="row mb-4">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
@@ -137,65 +144,59 @@
         }
     </style>
 </head>
-<body class="container-fluid py-4">
-    <h1 class="mb-4">Formulario, Tabla y Mapa</h1>
+<body class="container py-4">
+    <h1 class="mb-4">Formulario, Mapa y Tabla</h1>
 
-    <!-- Formulario horizontal debajo del título -->
+    <!-- Formulario con labels visibles -->
     <form method="post" class="row g-3 mb-4">
         {% csrf_token %}
-        <!-- Ejemplo de campos: ajusta según tu modelo -->
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label for="id_nombre" class="form-label">Nombre</label>
             {{ form.nombre }}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label for="id_latitud" class="form-label">Latitud</label>
             {{ form.latitud }}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            <label for="id_longitud" class="form-label">Longitud</label>
             {{ form.longitud }}
         </div>
-        <div class="col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
     </form>
 
-    <!-- Fila superior: tabla -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Latitud</th>
-                                <th>Longitud</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for r in registros %}
-                            <tr>
-                                <td>{{ r.id }}</td>
-                                <td>{{ r.nombre }}</td>
-                                <td>{{ r.latitud }}</td>
-                                <td>{{ r.longitud }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- Mapa debajo del formulario -->
+    <div class="card mb-4">
+        <div class="card-body p-0">
+            <div id="map"></div>
         </div>
     </div>
 
-    <!-- Fila inferior: mapa ocupa todo el ancho -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <div id="map"></div>
-                </div>
-            </div>
+    <!-- Tabla al final -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in registros %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.nombre }}</td>
+                        <td>{{ r.latitud }}</td>
+                        <td>{{ r.longitud }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

@@ -7,8 +7,15 @@
     <style>
         .container {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            /* tres columnas iguales */
+            grid-template-columns: 1fr 1fr;
+            /* dos columnas */
+            gap: 20px;
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            /* apilar formulario y tabla */
             gap: 20px;
         }
 
@@ -31,40 +38,41 @@
 
         #map {
             height: 400px;
-            /* altura fija */
             width: 100%;
         }
     </style>
 </head>
 
 <body>
-    <h1>Formulario, Tabla y Mapa en 3 Columnas</h1>
+    <h1>Formulario, Tabla y Mapa</h1>
     <div class="container">
-        <div class="form">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Guardar</button>
-            </form>
-        </div>
+        <div class="left-column">
+            <div class="form">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Guardar</button>
+                </form>
+            </div>
 
-        <div class="table">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Latitud</th>
-                    <th>Longitud</th>
-                </tr>
-                {% for r in registros %}
-                <tr>
-                    <td>{{ r.id }}</td>
-                    <td>{{ r.nombre }}</td>
-                    <td>{{ r.latitud }}</td>
-                    <td>{{ r.longitud }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+            <div class="table">
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Latitud</th>
+                        <th>Longitud</th>
+                    </tr>
+                    {% for r in registros %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.nombre }}</td>
+                        <td>{{ r.latitud }}</td>
+                        <td>{{ r.longitud }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
 
         <div id="map"></div>
@@ -119,7 +127,7 @@
     <style>
         .container {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* dos columnas */
+            grid-template-columns: 1fr 1fr; /* dos columnas en desktop */
             gap: 20px;
         }
         .left-column {
@@ -142,10 +150,23 @@
             height: 400px;
             width: 100%;
         }
+
+        /* Responsivo: en pantallas pequeñas, una sola columna */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr; /* una columna */
+            }
+            #map {
+                height: 100vh;   /* ocupa toda la altura de la pantalla */
+                width: 100vw;    /* ocupa todo el ancho */
+                margin: 0;       /* sin márgenes */
+                border: none;    /* quitar borde para fullscreen */
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Formulario, Tabla y Mapa</h1>
+    <h1>Formulario, Tabla y Mapa Responsivo</h1>
     <div class="container">
         <!-- Columna izquierda: Formulario arriba, tabla abajo -->
         <div class="left-column">
@@ -220,4 +241,3 @@
     </script>
 </body>
 </html>
-

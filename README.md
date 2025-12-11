@@ -38,6 +38,7 @@ Incluye funcionalidades de agregar, feedback visual, formularios y navegación r
    ```bash
    git clone https://github.com/tuusuario/tu-repo-coordenadas.git
    cd tu-repo-coordenadas
+   ```
 
 ## Crear entorno virtual e instalar dependencias:
 

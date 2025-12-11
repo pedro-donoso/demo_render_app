@@ -14,15 +14,6 @@ Incluye funcionalidades de agregar, feedback visual, formularios y navegación r
 
 ---
 
-## 🛠️ Tecnologías utilizadas
-- **Backend:** Django (Python), Gunicorn.  
-- **Frontend:** Tailwind CSS, Leaflet.js.  
-- **Base de datos:** SQLite (desarrollo), PostgreSQL (producción).  
-- **Despliegue:** Render.  
-- **Extras:** Esri World Imagery (capa satélite).
-
----
-
 ## 📸 Funciones
 - **Formulario de registro:** campos de nombre, latitud y longitud con validación.  
 - **Mapa satélite:** marcadores dinámicos, zoom automático al seleccionar fila.   
@@ -63,6 +54,37 @@ python manage.py runserver
 ## Abrir en navegador:
 
 👉 http://127.0.0.1:8000
+
+## 📌 El problema resuelto
+La aplicación aborda la necesidad de **organizar y visualizar coordenadas geográficas** de manera clara e interactiva.  
+En muchos contextos (educación, turismo, logística, investigación) los datos de latitud y longitud suelen quedar dispersos en hojas de cálculo o notas poco prácticas.  
+El producto resuelve este problema al:
+- Centralizar registros en una **tabla gestionable** (agregar nuevos datos, permanencia en BD con Postgresql).  
+- Mostrar cada registro como **marcador en un mapa satélite**.  
+- Permitir que al seleccionar un registro en la tabla el mapa se centre automáticamente en ese punto con zoom y popup.  
+- Ofrecer una interfaz **responsiva y accesible**, con feedback visual inmediato.
+
+---
+
+## 🛠️ Tecnologías utilizadas
+- **Backend:** Django (Python).  
+- **Frontend:** Tailwind CSS para estilos responsivos y Leaflet.js para mapas interactivos.  
+- **Base de datos:** SQLite en desarrollo, PostgreSQL en producción.  
+- **Mapa satélite:** Esri World Imagery como capa base.  
+- **Servidor:** Gunicorn y despliegue en Render.  
+
+---
+
+## 🚀 Enfoque de desarrollo seguido
+Se aplicaron buenas prácticas del ciclo de vida del software:
+
+1. **Planificación:** definición del problema, alcance mínimo viable. 
+2. **Diseño:** arquitectura MVC con Django, modelo `Registro`, interfaz con formulario, tabla y mapa satélite.  
+3. **Implementación:**    
+   - Integración de Leaflet con marcadores dinámicos.  
+   - Conexión tabla–mapa mediante eventos de clic.  .  
+4. **Pruebas:** verificación de interactividad tabla–mapa y responsividad en distintos dispositivos.  
+5. **Despliegue:** configuración de Gunicorn y Render. 
 
 
 

@@ -1,5 +1,7 @@
 # 🌍 Aplicación de Coordenadas con Django, Tailwind y Leaflet
 
+<img width="1345" height="593" alt="image" src="https://github.com/user-attachments/assets/9ec16e9a-7a38-4b92-943f-37645da658a0" />
+
 ## 📄 Descripción del producto
 Aplicación web que permite **registrar ubicaciones mediante nombre y coordenadas (latitud/longitud)**, gestionarlas en una tabla y visualizarlas en un **mapa satélite interactivo**.  
 Incluye funcionalidades de agregar, feedback visual, formularios y navegación responsiva con Tailwind.
@@ -22,6 +24,11 @@ Incluye funcionalidades de agregar, feedback visual, formularios y navegación r
 *(Agrega aquí tus capturas de pantalla o GIF mostrando la interacción tabla–mapa)*
 
 ---
+
+## Base de datos con Postgresql
+
+<img width="597" height="261" alt="image" src="https://github.com/user-attachments/assets/3f06a872-e423-4a08-92a9-c1f44a5ea6c0" />
+
 
 ## 🚀 Instalación y uso
 
